@@ -1,0 +1,47 @@
+# ==========================================
+# Keil MDK-ARM Build Outputs & Cache
+# ==========================================
+*.uvopt
+*.uvoptx
+*.uvgui*
+*.uvguix.*
+*.bak
+*.dep
+*.iex
+*.crf
+*.o
+*.d
+*.axf
+*.elf
+*.bin
+*.hex
+*.map
+*.htm
+*.lnp
+*.sct
+*.build_log.htm
+
+# Keil Output Folders
+Listings/
+Objects/
+MDK-ARM/Listings/
+MDK-ARM/Objects/
+MDK-ARM/RTE/
+MDK-ARM/Debug/
+
+# ==========================================
+# STM32CubeIDE / GCC Outputs
+# ==========================================
+Debug/
+Release/
+
+# ==========================================
+# OS & Editor generated files
+# ==========================================
+.vscode/
+.idea/
+*.swp
+*~
+Thumbs.db
+.DS_Store
+
