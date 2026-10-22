@@ -1,4 +1,4 @@
-﻿#include "LineSensor.h"
+#include "LineSensor.h"
 
 // Khoi tao cam bien
 void LineSensor_Init(LineSensor_t *sensor)
@@ -115,6 +115,8 @@ uint8_t LineSensor_ReadDigital(
     uint8_t dig = 0;
     uint8_t count = 0;
     uint8_t i;
+    uint8_t left_count = 0;
+    uint8_t right_count = 0;
 
     for (i = 0; i < LINE_SENSOR_COUNT; i++)
     {
@@ -127,20 +129,36 @@ uint8_t LineSensor_ReadDigital(
             dig |= (1 << i);
             count++;
 
-            // Ghi nhan huong lech khi mat o ngoai bien bat duoc line
-            if (i <= 2)
+            // Dem so mat bat duoc line o nua trai (0..3) va nua phai (4..7)
+            if (i < 4)
             {
-                sensor->last_dir = -1; // Vach o ben trai (mat 0, 1, 2)
+                left_count++;
             }
-            else if (i >= 5)
+            else
             {
-                sensor->last_dir = 1;  // Vach o ben phai (mat 5, 6, 7)
+                right_count++;
             }
         }
     }
 
     sensor->digital = dig;
     sensor->active_count = count;
+
+    // Cap nhat huong lech lan gan nhat bat duoc line:
+    // So sanh so mat bat duoc line o nua trai va nua phai,
+    // ben nao co so mat bat duoc line nhieu hon thi luu huong ve ben do (-1: trai, +1: phai)
+    if (dig != 0x00)
+    {
+        if (left_count > right_count)
+        {
+            sensor->last_dir = -1; // Ben trai nhieu mat bat line hon -> xoay trai
+        }
+        else if (right_count > left_count)
+        {
+            sensor->last_dir = 1;  // Ben phai nhieu mat bat line hon -> xoay phai
+        }
+        // Neu left_count == right_count: giu nguyen last_dir lan gan nhat truoc do
+    }
 
     return dig;
 }
@@ -196,13 +214,17 @@ int32_t LineSensor_GetError(
     position = (int32_t)(weighted_sum / sum);
     error = position - LINE_CENTER;
 
-    if (error > 400)
+    // Neu chua tung xac dinh duoc huong (last_dir == 0), ho tro xac dinh ban dau qua error
+    if (sensor->last_dir == 0)
     {
-        sensor->last_dir = 1;  // Vach o ben phai
-    }
-    else if (error < -400)
-    {
-        sensor->last_dir = -1; // Vach o ben trai
+        if (error > 400)
+        {
+            sensor->last_dir = 1;  // Vach o ben phai
+        }
+        else if (error < -400)
+        {
+            sensor->last_dir = -1; // Vach o ben trai
+        }
     }
 
     return error;

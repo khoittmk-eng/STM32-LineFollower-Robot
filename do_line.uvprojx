@@ -417,6 +417,21 @@
               <FileType>1</FileType>
               <FilePath>.\lib\motor_control.c</FilePath>
             </File>
+            <File>
+              <FileName>button.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\lib\button.c</FilePath>
+            </File>
+            <File>
+              <FileName>robot_control.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\lib\robot_control.c</FilePath>
+            </File>
+            <File>
+              <FileName>menu.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\lib\menu.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
